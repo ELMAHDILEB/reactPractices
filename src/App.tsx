@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams  } from "react-router-dom";
 
 interface Post {
   id: number;
@@ -11,9 +12,15 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState<number>(1); // number of page
-  const [limit] = useState<number>(10); // limit page visible
+  // const [page, setPage] = useState<number>(1); // number of page
+  const [totalPages, setTotalPages] = useState<number>(0); 
+  // const [limit] = useState<number>(10); // limit page visible
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  // use searchParams for write and learn on URL
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Number(searchParams.get("_page")) || 1;
+  const limit = Number(searchParams.get("_limit")) || 10;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -34,6 +41,8 @@ const App = () => {
         );
 
         if (!response.ok) throw new Error("failed to fetch data");
+        const total = response.headers.get("x-total-count");
+        if(total) setTotalPages(Math.ceil(Number(total) / limit))
         const posts = (await response.json()) as Post[];
         setPosts(posts);
       } catch (err) {
@@ -48,7 +57,7 @@ const App = () => {
     };
     fetchPosts();
     return () => abortControllerRef.current?.abort();
-  }, [page]);
+  }, [page, limit]);
 
   if (error) {
     return <div style={{ color: "red" }}>Error: {error}</div>;
@@ -58,15 +67,16 @@ const App = () => {
       <h1>Data Fetching</h1>
       <div>
         <button
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          onClick={() => setSearchParams({ _page: String(Math.max(page - 1, 1)),  _limit: String(limit)})
+        }
           disabled={page === 1}
         >
           Prev
         </button>
-        <span>Page: {page}</span>
+        <span>Page: {page} / {totalPages}</span>
         <button
-          onClick={() => setPage((p) => p + 1)}
-          disabled={page === posts.length}
+          onClick={() => setSearchParams({_page: String(page + 1), _limit: String(limit)})}
+          disabled={page === totalPages}
         >
           Next
         </button>
