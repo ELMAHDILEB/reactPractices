@@ -36,3 +36,26 @@ npm install
 
 # Start development server
 npm run dev
+
+## Usage
+- Open your browser at http://localhost:5173 (default Vite port)
+- Navigate through pages using Prev and Next buttons
+- Observe the URL query parameters _page and _limit updating automatically
+- Check loading states and error handling when fetching data
+
+## Technologies
+- React 18
+- TypeScript
+- Vite
+- React Router DOM
+- Fetch API
+
+## Contributing
+- Fork the repository
+- Create your feature branch (`git checkout -b feature/new-feature`)
+- Commit your changes (`git commit -m "Add new feature"`)
+- Push to the branch (`git push origin feature/new-feature`)
+- Open a pull request
+
+## License
+This project is licensed under the MIT License.
