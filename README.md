@@ -1,35 +1,62 @@
-# React + TypeScript + Vite Pagination Project
+React Blog App with Pagination, Search & Favorites
 
-This is a small React application using TypeScript and Vite. It fetches data from an API and implements pagination using URL query parameters.
+This project is a small React application built with TypeScript, React Router, and Context + useReducer to manage favorites. The app fetches Posts from an external API with Pagination, Live Search, and a Favorites System.
 
-## Table of Contents
-- [About](#about)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies](#technologies)
-- [Contributing](#contributing)
-- [License](#license)
+Features
 
-## About
-This app fetches posts from [JSONPlaceholder](https://jsonplaceholder.typicode.com/) and displays them with pagination.  
-The pagination uses query parameters `_page` and `_limit` in the URL, and allows navigation via **Prev** and **Next** buttons.
+Posts Listing with Pagination
 
-## Features
-- Fetch posts from JSONPlaceholder API
-- Pagination with Prev / Next buttons
-- URL query parameters (`_page` & `_limit`) for navigation
-- Loading state and error handling
-- Built with TypeScript + React 18 + Vite
+Displays a limited number of posts per page (_page and _limit)
 
-## Installation
+Prev and Next buttons to navigate pages
 
-```bash
-# Clone the repo
-git clone https://github.com/ELMAHDILEB/reactPractices.git
+URL stays synchronized with the current page
 
-# Go to project folder
-cd vite-project
+Live Search
+
+Search by title, body, or ID
+
+Results update instantly without page reload
+
+Works with both paginated data or fetching all posts
+
+Favorites System
+
+Add or remove any post to/from favorites
+
+Managed globally using Context + useReducer
+
+Favorite posts show "❤️ Favorite" or "💔 Remove" button
+
+Post Details Page
+
+Clicking Show Detail opens a post details page
+
+Passes state via React Router including post info and current pagination
+
+AbortController Support
+
+Cancels any old requests when navigating quickly between pages
+
+Prevents displaying outdated data during page changes or search
+
+Tech Stack
+
+React + TypeScript
+
+React Router DOM
+
+Context API + useReducer
+
+JSONPlaceholder API (https://jsonplaceholder.typicode.com/posts)
+
+CSS Grid / Flexbox for layout 
+
+# Clone the repository
+git clone https://github.com/username/react-blog-app.git
+
+# Enter the project folder
+cd react-blog-app
 
 # Install dependencies
 npm install
@@ -37,25 +64,21 @@ npm install
 # Start development server
 npm run dev
 
-## Usage
-- Open your browser at http://localhost:5173 (default Vite port)
-- Navigate through pages using Prev and Next buttons
-- Observe the URL query parameters _page and _limit updating automatically
-- Check loading states and error handling when fetching data
 
-## Technologies
-- React 18
-- TypeScript
-- Vite
-- React Router DOM
-- Fetch API
+Usage
 
-## Contributing
-- Fork the repository
-- Create your feature branch (`git checkout -b feature/new-feature`)
-- Commit your changes (`git commit -m "Add new feature"`)
-- Push to the branch (`git push origin feature/new-feature`)
-- Open a pull request
+Visit the main page /post to see the list of posts
 
-## License
-This project is licensed under the MIT License.
+Use the Prev and Next buttons to navigate pages
+
+Type in the search input to filter posts by title, body, or ID
+
+Click Show Detail on any post to view detailed content
+
+Add or remove posts to favorites with the heart button
+
+The app uses local state + Context to manage favorites
+
+Searching can work on paginated posts or fetch all posts depending on the configuration
+
+AbortController ensures smoother user experience by cancelling outdated fetch requests
