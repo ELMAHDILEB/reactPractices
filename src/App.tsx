@@ -5,7 +5,7 @@ import FavoritesPage from "./pages/FavoritesPage"
 
 const App = () => {
   const links = [
-    {path: "/post", element: <Home/>},
+    {path: "/", element: <Home/>},
     {path: "/post/:id", element: <PostDetails/>},
     {path: "/favorites", element: <FavoritesPage/>}
   ]
