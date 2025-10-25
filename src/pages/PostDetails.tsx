@@ -9,7 +9,7 @@ const PostDetails = () => {
     if(!post) return <div>No Post Founded</div>
 
     const handleBack = ()=>{
-      navigate(`/post?_page=${page}&_limit=${limit}`);
+      navigate(`/?_page=${page}&_limit=${limit}`);
     }
      
 

@@ -1,11 +1,13 @@
 import { useFavorites } from "../context/FavoritesContext";
+
 const FavoritesPage = () => {
   const { favorites } = useFavorites();
 
   if (favorites.length <= 0) return <h2>No Favorite Posts ⭐</h2>;
   return (
     <>
-      <section>
+      
+      <main>
         {favorites.map(({ id, title, body }) => {
           return (
             <article key={id}>
@@ -15,7 +17,7 @@ const FavoritesPage = () => {
             </article>
           );
         })}
-      </section>
+      </main>
     </>
   );
 };

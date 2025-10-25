@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import SearchBar from "../compenents/SearchBar";
 import Buttons from "../compenents/Buttons";
 import type { Posts } from "../types/types";
 import PostCard from "../compenents/PostCard";
+// import FavoritesPage from "./FavoritesPage";
 
 const Home = () => {
   const baseURL = "https://jsonplaceholder.typicode.com/";
@@ -12,7 +13,6 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -21,6 +21,7 @@ const Home = () => {
   const page = Number(searchParams.get("_page")) || 1;
   const limit = Number(searchParams.get("_limit")) || 10;
   const search = searchParams.get("search") || "";
+  const searchTerm = searchParams.get("searchTerm") || "";
   const query = search ? `&q=${search}` : "";
 
   useEffect(() => {
@@ -74,13 +75,15 @@ const Home = () => {
     });
   };
 
-  const handleSearch = (value: string) => (
+
+  const handleSearch = useCallback((value: string) => (
     setSearchParams({
       _page: "1",
       _limit: limit.toString(),
       search: value
     })
-  )
+  ),[]);
+
 
   const filtredPosts = posts.filter((post) => {
     return (
@@ -95,6 +98,7 @@ const Home = () => {
       <header className="">
         <h1>Posts</h1>
         <SearchBar onSearch={handleSearch} />
+        <Link to="/favorites" >❤️ Favorites</Link>
       </header>
 
       <main>
