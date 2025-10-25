@@ -12,7 +12,7 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(0);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const [searchTerm , setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -20,6 +20,8 @@ const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("_page")) || 1;
   const limit = Number(searchParams.get("_limit")) || 10;
+  const search = searchParams.get("search") || "";
+  const query = search ? `&q=${search}` : "";
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,7 +35,7 @@ const Home = () => {
         setIsLoading(true);
 
         const response = await fetch(
-          `${baseURL}/posts?_page=${page}&_limit=${limit}`,
+          `${baseURL}/posts?_page=${page}&_limit=${limit}${query}`,
           {
             signal: abortControllerRef.current?.signal, // link abort controller with fetch
           }
@@ -56,7 +58,7 @@ const Home = () => {
     };
     fetchPosts();
     return () => abortControllerRef.current?.abort();
-  }, [page, limit]);
+  }, [page, limit, search]);
 
   if (error) {
     return <div style={{ color: "red" }}>Error: {error}</div>;
@@ -72,15 +74,27 @@ const Home = () => {
     });
   };
 
-  const filtredPosts = posts.filter((post)=>{
-        return post.title.toLowerCase().includes(searchTerm.toLowerCase()) || post.title.toLowerCase().includes(searchTerm.toLowerCase()) || post.id.toString() === searchTerm
-  })
+  const handleSearch = (value: string) => (
+    setSearchParams({
+      _page: "1",
+      _limit: limit.toString(),
+      search: value
+    })
+  )
+
+  const filtredPosts = posts.filter((post) => {
+    return (
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.id.toString() === searchTerm
+    );
+  });
 
   return (
     <>
       <header className="">
         <h1>Posts</h1>
-        <SearchBar   onSearch={setSearchTerm}/>
+        <SearchBar onSearch={handleSearch} />
       </header>
 
       <main>
@@ -91,7 +105,7 @@ const Home = () => {
             return (
               <PostCard
                 key={post.id}
-                  {...post}
+                {...post}
                 onHandleShowBlog={handleShowBlog}
               />
             );
