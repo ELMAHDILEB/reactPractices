@@ -4,7 +4,7 @@ import SearchBar from "../compenents/SearchBar";
 import Buttons from "../compenents/Buttons";
 import type { Posts } from "../types/types";
 import PostCard from "../compenents/PostCard";
-// import FavoritesPage from "./FavoritesPage";
+import { useDebounce } from "../hooks/useDebounced";
 
 const Home = () => {
   const baseURL = "https://jsonplaceholder.typicode.com/";
@@ -22,7 +22,8 @@ const Home = () => {
   const limit = Number(searchParams.get("_limit")) || 10;
   const search = searchParams.get("search") || "";
   const searchTerm = searchParams.get("searchTerm") || "";
-  const query = search ? `&q=${search}` : "";
+  const debounced = useDebounce(search, 500);
+  const query = debounced ? `&q=${search}` : "";
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -59,7 +60,7 @@ const Home = () => {
     };
     fetchPosts();
     return () => abortControllerRef.current?.abort();
-  }, [page, limit, search]);
+  }, [page, limit, debounced]);
 
   if (error) {
     return <div style={{ color: "red" }}>Error: {error}</div>;
